@@ -1,0 +1,325 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الحارس الذكي | Smart Guard AI</title>
+<style>
+*{box-sizing:border-box;scroll-behavior:smooth}
+body{margin:0;font-family:Tahoma,Arial,sans-serif;background:#07111f;color:#edf5ff;line-height:1.9}
+header{background:#0b192b;border-bottom:1px solid #203752;padding:16px 7%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.logo{color:#38d9ff;font-size:21px;font-weight:bold}
+nav{display:flex;gap:18px;flex-wrap:wrap}
+nav a{color:#d4e4f7;text-decoration:none;font-size:14px}
+nav a:hover{color:#38d9ff}
+.hero{text-align:center;padding:85px 20px;background:radial-gradient(ellipse at top,#123654,#07111f 70%)}
+.tag{color:#38d9ff;border:1px solid #28658b;padding:5px 15px;border-radius:30px;display:inline-block;font-size:13px}
+h1{font-size:clamp(32px,5vw,54px);line-height:1.5;margin:20px 0 8px}
+h1 span,h2 span{color:#38d9ff}
+.hero p{max-width:720px;margin:15px auto 25px;color:#b7c8dc}
+.btn{display:inline-block;padding:12px 24px;border-radius:9px;background:#16b8dc;color:#04111d;text-decoration:none;font-weight:bold;border:none;cursor:pointer;font-size:15px}
+.btn:hover{background:#70e6ff}
+section{padding:65px 7%;scroll-margin-top:20px}
+.section-title{text-align:center;margin-bottom:32px}
+.section-title h2{font-size:29px;margin-bottom:5px}
+.section-title p{color:#a9bdd3}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.card{background:#0d1d30;border:1px solid #203752;border-radius:15px;padding:22px;transition:.2s}
+.card:hover{border-color:#38d9ff;transform:translateY(-3px)}
+.card h3{color:#7de7ff;margin-top:5px}
+.card p{color:#b6c6d8;font-size:14px}
+.icon{font-size:32px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:15px;margin-top:30px}
+.stat{text-align:center;background:#0d1d30;padding:20px 10px;border-radius:12px;border:1px solid #203752}
+.stat strong{display:block;font-size:30px;color:#38d9ff}
+.stat small{color:#b6c6d8}
+.notice{color:#a9bdd3;font-size:12px;margin-top:20px}
+.steps{border-right:3px solid #1cb9df;padding-right:22px}
+.step{margin:22px 0}
+.step h3{color:#7de7ff}
+footer{background:#030a12;border-top:1px solid #203752;text-align:center;padding:25px 15px;color:#9db0c6;font-size:13px}
+@media(max-width:600px){header{justify-content:center}nav{justify-content:center}.hero{padding:55px 18px}section{padding:45px 5%}}
+
+/* تصميم محاكاة الحارس الذكي */
+.sg-system{background:#050c16;color:#e8f3ff;padding:55px 5%;font-family:Tahoma,Arial,sans-serif}
+.sg-header{text-align:center;margin-bottom:28px}
+.sg-header h2{color:#35d9ff;font-size:clamp(23px,4vw,34px)}
+.sg-header p{color:#9db3c9}
+.sg-live{color:#52e6a9;font-size:12px}
+.sg-dashboard{max-width:950px;margin:auto;overflow:hidden;border:1px solid #29445f;border-radius:14px;background:#0b1726;box-shadow:0 15px 45px #0006}
+.sg-topbar,.sg-bottom{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:14px 17px;background:#101f31;color:#61dff7;font-size:11px;letter-spacing:1px}
+.sg-video{position:relative;width:100%;aspect-ratio:16/9;min-height:230px;overflow:hidden;background:#02060a}
+.sg-road-scene{background:linear-gradient(#173d5a 0%,#70a9c5 53%,#283a45 54%,#111923 100%)}
+.sg-skyline{position:absolute;inset:18% 0 40%;opacity:.85;background:repeating-linear-gradient(90deg,#1b3549 0 35px,#6b91a5 35px 42px,#243f53 42px 80px,transparent 80px 105px);clip-path:polygon(0 45%,8% 45%,8% 20%,15% 20%,15% 55%,23% 55%,23% 5%,30% 5%,30% 60%,40% 60%,40% 30%,47% 30%,47% 55%,58% 55%,58% 0,65% 0,65% 50%,75% 50%,75% 18%,83% 18%,83% 55%,100% 55%,100% 100%,0 100%)}
+.sg-road{position:absolute;inset:53% 0 0;background:linear-gradient(100deg,#252e38,#515c66 50%,#252e38);clip-path:polygon(35% 0,65% 0,100% 100%,0 100%)}
+.sg-road-line{position:absolute;top:58%;left:49%;height:42%;width:3px;background:repeating-linear-gradient(to bottom,#f6f8fc 0 20px,transparent 20px 38px);animation:sgLaneMove .6s linear infinite}
+.sg-demo-car{position:absolute;z-index:1;font-size:clamp(25px,5vw,48px);filter:drop-shadow(0 5px 3px #0008);animation:sgCarMove 5s ease-in-out infinite}
+.sg-car-one{left:25%;top:54%;animation-delay:-1s}
+.sg-car-two{left:57%;top:62%;animation-delay:-3s}
+.sg-car-three{left:40%;top:48%;animation-delay:-4s}
+.sg-camera-label,.sg-rec{position:absolute;top:12px;z-index:4;padding:6px 8px;border-radius:4px;background:#03101bc9;color:#dffaff;font-size:10px}
+.sg-camera-label{left:12px}
+.sg-rec{right:12px;color:#ff7777}
+.sg-box{position:absolute;z-index:2;border:2px solid #35f0bd;width:18%;height:28%;top:36%;animation:sgTrack 2.5s ease-in-out infinite alternate;pointer-events:none}
+.sg-box span{position:absolute;top:-20px;left:0;white-space:nowrap;padding:3px 5px;background:#35f0bd;color:#03101b;font-size:9px;font-weight:bold}
+.sg-box-one{left:24%}
+.sg-box-two{left:59%;top:46%;width:13%;height:21%;animation-delay:.7s}
+.sg-target-label{position:absolute;left:12px;bottom:35px;background:#071523dc;color:#4fe6ff;padding:7px 10px;font-size:10px;direction:ltr;z-index:4}
+.sg-video-notice{position:absolute;bottom:7px;right:8px;z-index:4;padding:5px 7px;background:#071523dc;color:#fff;font-size:10px}
+@keyframes sgTrack{from{transform:translate(0,0)}to{transform:translate(10px,-5px)}}
+@keyframes sgLaneMove{from{background-position:0 0}to{background-position:0 38px}}
+@keyframes sgCarMove{0%{transform:translateY(18px) scale(.75)}50%{transform:translateY(-8px) scale(1)}100%{transform:translateY(18px) scale(.75)}}
+.sg-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:#29445f;border-top:1px solid #29445f}
+.sg-stats div{padding:15px 10px;background:#0b1726;min-width:0}
+.sg-stats small,.sg-stats strong{display:block;overflow-wrap:anywhere}
+.sg-stats small{color:#92a9c0;margin-bottom:8px;font-size:11px}
+.sg-stats strong{color:#4fe6ff;font-size:13px}
+.sg-controls{padding:22px}
+.sg-controls label{display:block;margin-bottom:9px}
+#sgViolation{width:100%;padding:13px;background:#07111f;color:#fff;border:1px solid #34516b;border-radius:7px;font-size:15px}
+#sgAnalyze{width:100%;margin-top:14px;padding:14px;background:#1cc8e5;color:#03111b;border:0;border-radius:7px;font-weight:bold;font-size:15px;cursor:pointer}
+#sgAnalyze:disabled{opacity:.6}
+.sg-result{margin-top:18px;padding:16px;border:1px solid #28465e;border-radius:8px;background:#07111f}
+.sg-result h3{color:#4fe6ff;margin-top:0}
+.sg-result p{color:#bfd0df;line-height:1.8}
+.sg-alert .sg-box{border-color:#ffb74d;box-shadow:0 0 12px #ffb74d77}
+.sg-alert .sg-box span{background:#ffb74d}
+.sg-bottom{color:#91a9bf}
+@media(max-width:550px){.sg-system{padding:35px 3%}.sg-video{min-height:200px}.sg-stats small{font-size:10px}.sg-stats strong{font-size:11px}.sg-controls{padding:14px}}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="logo">🛡️ الحارس الذكي</div>
+  <nav>
+    <a href="#about">عن المشروع</a>
+    <a href="#how">آلية العمل</a>
+    <a href="#violations">المخالفات</a>
+    <a href="#plan">مراحل التنفيذ</a>
+    <a href="#simulation">المحاكاة</a>
+  </nav>
+</header>
+
+<main>
+<section class="hero">
+  <span class="tag">مشروع ابتكار تقني للسلامة المرورية</span>
+  <h1>الحارس الذكي<br><span>Smart Guard AI</span></h1>
+  <p>نظام مقترح يستخدم الذكاء الاصطناعي والرؤية الحاسوبية للمساعدة في رصد المخالفات المرورية وتوثيقها، بهدف تعزيز السلامة على الطرق والحد من السلوكيات الخطرة.</p>
+  <a class="btn" href="#about">اكتشف المشروع ←</a>
+</section>
+
+<section id="about">
+  <div class="section-title">
+    <h2>💡 فكرة <span>المشروع</span></h2>
+    <p>كيف يمكن للتقنية أن تساعد في جعل الطرق أكثر أمانًا؟</p>
+  </div>
+  <div class="card">
+    <h3>ما هو الحارس الذكي؟</h3>
+    <p>الحارس الذكي هو مقترح لنظام رصد مروري شامل، يعتمد على كاميرات ورادارات وخوارزميات الذكاء الاصطناعي لتحليل حركة المركبات واكتشاف أنماط من المخالفات المرورية.</p>
+    <p>يقترح المشروع توثيق المخالفات بصور ومقاطع فيديو وبيانات مكانية وزمنية، ثم إرسال الأدلة إلى منصة مركزية لمراجعتها ومعالجتها وفق الأنظمة المعتمدة.</p>
+  </div>
+  <div class="stats">
+    <div class="stat"><strong>11</strong><small>نوعًا من المخالفات المستهدفة</small></div>
+    <div class="stat"><strong>99.2%</strong><small>دقة مستهدفة مذكورة في المقترح</small></div>
+    <div class="stat"><strong>&lt; 0.5</strong><small>ثانية: زمن الاستجابة المستهدف</small></div>
+  </div>
+  <p class="notice">ملاحظة: الأرقام أعلاه واردة في وثيقة المقترح، ولا تعني أن النظام بُني أو اجتاز اختبارات تحقق هذه النتائج.</p>
+</section>
+
+<section id="how" style="background:#091726">
+  <div class="section-title">
+    <h2>⚙️ كيف يعمل <span>النظام؟</span></h2>
+    <p>أربع مراحل تقنية وفق التصور المقترح للمشروع</p>
+  </div>
+  <div class="grid">
+    <div class="card"><div class="icon">📷</div><h3>1. التقاط البيانات</h3><p>تستخدم الكاميرات عالية الدقة والأشعة تحت الحمراء والرادارات لالتقاط صور المركبات وحركتها.</p></div>
+    <div class="card"><div class="icon">🧠</div><h3>2. تحليل ذكي</h3><p>تحلل خوارزميات الرؤية الحاسوبية الصور والحركة للمساعدة في اكتشاف المخالفات المحتملة.</p></div>
+    <div class="card"><div class="icon">🔎</div><h3>3. التعرف والتوثيق</h3><p>يقترح النظام قراءة اللوحات ورقم الشاصي عند إمكان ذلك، مع حفظ الأدلة المرتبطة بالحالة.</p></div>
+    <div class="card"><div class="icon">🔐</div><h3>4. إرسال الأدلة</h3><p>تُشفّر البيانات وفق المقترح وتُرسل إلى المنصة المركزية للمراجعة والمعالجة النظامية.</p></div>
+  </div>
+</section>
+
+<section id="violations">
+  <div class="section-title">
+    <h2>🚦 المخالفات <span>المستهدفة</span></h2>
+    <p>المخالفات الإحدى عشرة الواردة في وثيقة المشروع</p>
+  </div>
+  <div class="grid">
+    <div class="card"><div class="icon">🏎️</div><h3>01. تجاوز السرعة</h3><p>رصد السرعة باستخدام الرادار وقياس متوسط السرعة بين نقطتين.</p></div>
+    <div class="card"><div class="icon">🚔</div><h3>02. مركبات مطلوبة أمنيًا</h3><p>التعرف على اللوحات ومطابقتها مع قواعد البيانات المعتمدة.</p></div>
+    <div class="card"><div class="icon">📱</div><h3>03. استخدام الهاتف</h3><p>تحليل وضعية اليد والسائق باستخدام تقنيات الرؤية الحاسوبية.</p></div>
+    <div class="card"><div class="icon">👀</div><h3>04. الانشغال عن الطريق</h3><p>تحليل سلوك السائق لرصد تشتت النظر وبعض السلوكيات المشتتة.</p></div>
+    <div class="card"><div class="icon">🔍</div><h3>05. مركبات بلا لوحات</h3><p>اقتراح التعرف على رقم الشاصي والبصمة المرئية للمركبة.</p></div>
+    <div class="card"><div class="icon">🚦</div><h3>06. تجاوز الإشارة الحمراء</h3><p>مطابقة حالة الإشارة مع حركة المركبة وخط الوقوف.</p></div>
+    <div class="card"><div class="icon">🅿️</div><h3>07. الوقوف الخاطئ</h3><p>تحديد مواقع الوقوف الممنوع أو الذي يعيق حركة السير.</p></div>
+    <div class="card"><div class="icon">🎫</div><h3>08. الوقوف دون دفع</h3><p>اقتراح مطابقة بيانات المركبة مع نظام المواقف الموحد.</p></div>
+    <div class="card"><div class="icon">↔️</div><h3>09. عدم الالتزام بالمسارات</h3><p>تحليل خطوط الطريق ومسار المركبة لرصد الانحرافات.</p></div>
+    <div class="card"><div class="icon">🚑</div><h3>10. السير على كتف الطريق</h3><p>تحليل حدود مسار الطوارئ ورصد المركبات التي تسير عليه.</p></div>
+    <div class="card"><div class="icon">⚠️</div><h3>11. التجاوز الخطر</h3><p>تحليل الحركة والتنقل بين المسارات دون مسافة أمان كافية.</p></div>
+  </div>
+</section>
+
+<section id="innovation" style="background:#091726">
+  <div class="section-title"><h2>✨ ما الذي يميز <span>المشروع؟</span></h2></div>
+  <div class="grid">
+    <div class="card"><h3>🚘 التعرف على المركبات</h3><p>يقترح المشروع استخدام رقم الشاصي VIN والبصمة المرئية للمساعدة في التعرف على المركبات التي لا تحمل لوحات.</p></div>
+    <div class="card"><h3>🎥 الأدلة الرقمية</h3><p>توثيق الحالة بالصور والفيديو وبيانات الوقت والموقع لدعم مراجعة المخالفة المحتملة.</p></div>
+    <div class="card"><h3>🛣️ التركيز على السلامة</h3><p>الاهتمام بالسلوكيات الخطرة مثل التجاوز العشوائي والسير على كتف الطريق.</p></div>
+  </div>
+</section>
+
+<section id="plan">
+  <div class="section-title">
+    <h2>🗺️ مراحل <span>تنفيذ المشروع</span></h2>
+    <p>الجدول الزمني المقترح في الوثيقة</p>
+  </div>
+  <div class="steps">
+    <div class="step"><h3>المرحلة الأولى — الشهران 1 و2</h3><p>تدريب خوارزميات قراءة رقم الشاصي وتحليل وضعيات السائق.</p></div>
+    <div class="step"><h3>المرحلة الثانية — الشهر 3</h3><p>تطوير الكاميرات الطرفية ودمج حساسات المسارات وكتف الطريق.</p></div>
+    <div class="step"><h3>المرحلة الثالثة — الشهر 4</h3><p>إجراء اختبار ميداني تجريبي ومعايرة الدقة وتقليل الإنذارات الخاطئة.</p></div>
+    <div class="step"><h3>المرحلة الرابعة — الشهر 5</h3><p>الربط مع لوحة التحكم المركزية والإطلاق المقترح للخدمة.</p></div>
+  </div>
+</section>
+
+<section id="future" style="background:#091726">
+  <div class="section-title"><h2>🎯 الهدف <span>المستقبلي</span></h2></div>
+  <div class="card" style="text-align:center">
+    <p>يطمح مشروع الحارس الذكي إلى توظيف التقنيات الحديثة للمساعدة في تحسين الرصد المروري، وتوثيق المخالفات، والحد من السلوكيات التي قد تعرّض مستخدمي الطريق للخطر.</p>
+    <p>ويحتاج تنفيذ النظام إلى تطوير فعلي واختبارات ميدانية، والتحقق من الدقة والخصوصية والالتزام بالقوانين قبل استخدامه في الرصد الرسمي.</p>
+    <a class="btn" href="#about">العودة إلى بداية الموقع ↑</a>
+  </div>
+</section>
+
+<section id="simulation" class="sg-system" dir="rtl">
+  <div class="sg-header">
+    <span class="sg-live">● النظام التجريبي جاهز</span>
+    <h2>🛡️ الحارس الذكي | Smart Guard AI</h2>
+    <p>منصة محاكاة الرصد المروري الذكي</p>
+  </div>
+  <div class="sg-dashboard">
+    <div class="sg-topbar">
+      <span>TRAFFIC SURVEILLANCE</span>
+      <span id="sgConnection">● DEMO SCENE READY</span>
+    </div>
+
+    <div class="sg-video sg-road-scene">
+      <div class="sg-skyline"></div>
+      <div class="sg-road"></div>
+      <div class="sg-road-line"></div>
+      <div class="sg-camera-label">CAM 01 | ROAD MONITORING</div>
+      <div class="sg-rec">● REC</div>
+      <div class="sg-demo-car sg-car-one">🚙</div>
+      <div class="sg-demo-car sg-car-two">🚗</div>
+      <div class="sg-demo-car sg-car-three">🚘</div>
+      <div class="sg-box sg-box-one"><span>VEHICLE 01</span></div>
+      <div class="sg-box sg-box-two"><span>VEHICLE 02</span></div>
+      <div class="sg-target-label" id="sgTargetLabel">AI TRACKING: DEMO</div>
+      <div class="sg-video-notice">محاكاة متحركة — ليست كاميرا حقيقية</div>
+    </div>
+
+    <div class="sg-stats">
+      <div><small>مصدر المشهد</small><strong>رسوم متحركة</strong></div>
+      <div><small>حالة العرض</small><strong id="sgStatus">جاهز للرصد</strong></div>
+      <div><small>نوع التنبيه</small><strong id="sgAlertType">لا يوجد</strong></div>
+    </div>
+
+    <div class="sg-controls">
+      <label for="sgViolation">اختر نوع المخالفة</label>
+      <select id="sgViolation">
+        <option value="تجاوز السرعة">🏎️ تجاوز السرعة</option>
+        <option value="مركبة مطلوبة أمنيًا">🛡️ مركبة مطلوبة أمنيًا</option>
+        <option value="استخدام الهاتف">📱 استخدام الهاتف</option>
+        <option value="الانشغال عن الطريق">👀 الانشغال عن الطريق</option>
+        <option value="مركبة دون لوحات">🔍 مركبة دون لوحات</option>
+        <option value="تجاوز الإشارة الحمراء">🚦 تجاوز الإشارة الحمراء</option>
+        <option value="الوقوف الخاطئ والممنوع">🅿️ الوقوف الخاطئ والممنوع</option>
+        <option value="الوقوف دون دفع">💳 الوقوف دون دفع</option>
+        <option value="عدم الالتزام بالمسارات">↔️ عدم الالتزام بالمسارات</option>
+        <option value="السير على كتف الطريق">🚧 السير على كتف الطريق</option>
+        <option value="التجاوز بصورة خطرة">⚠️ التجاوز بصورة خطرة</option>
+      </select>
+
+      <button id="sgAnalyze">▶ بدء المحاكاة</button>
+
+      <div id="sgResult" class="sg-result" aria-live="polite">
+        <h3 id="sgResultTitle">النظام جاهز</h3>
+        <p id="sgResultText">اختر نوع المخالفة ثم اضغط بدء المحاكاة لعرض التنبيه التوضيحي.</p>
+      </div>
+    </div>
+
+    <div class="sg-bottom">
+      <span>SMART GUARD AI</span>
+      <span>DEMONSTRATION MODE · عرض توضيحي فقط</span>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <p>🛡️ الحارس الذكي — Smart Guard AI</p>
+  <p>مشروع ابتكار تقني مقترح لتعزيز السلامة المرورية</p>
+  <p>© 2026 — صفحة تعريفية بالمشروع</p>
+</footer>
+
+<script>
+(function(){
+  const select = document.getElementById("sgViolation");
+  const button = document.getElementById("sgAnalyze");
+  const dashboard = document.querySelector("#simulation .sg-dashboard");
+  const resultTitle = document.getElementById("sgResultTitle");
+  const resultText = document.getElementById("sgResultText");
+  const status = document.getElementById("sgStatus");
+  const alertType = document.getElementById("sgAlertType");
+  const target = document.getElementById("sgTargetLabel");
+
+  const descriptions = {
+    "تجاوز السرعة":"تنبيه توضيحي: تم اختيار سيناريو تجاوز السرعة.",
+    "مركبة مطلوبة أمنيًا":"تنبيه توضيحي: تم اختيار سيناريو مطابقة بيانات مركبة.",
+    "استخدام الهاتف":"تنبيه توضيحي: تم اختيار سيناريو استخدام الهاتف.",
+    "الانشغال عن الطريق":"تنبيه توضيحي: تم اختيار سيناريو انشغال السائق.",
+    "مركبة دون لوحات":"تنبيه توضيحي: تم اختيار سيناريو مركبة دون لوحات.",
+    "تجاوز الإشارة الحمراء":"تنبيه توضيحي: تم اختيار سيناريو الإشارة الحمراء.",
+    "الوقوف الخاطئ والممنوع":"تنبيه توضيحي: تم اختيار سيناريو الوقوف الممنوع.",
+    "الوقوف دون دفع":"تنبيه توضيحي: تم اختيار سيناريو عدم دفع رسوم الموقف.",
+    "عدم الالتزام بالمسارات":"تنبيه توضيحي: تم اختيار سيناريو تغيير المسار.",
+    "السير على كتف الطريق":"تنبيه توضيحي: تم اختيار سيناريو السير على كتف الطريق.",
+    "التجاوز بصورة خطرة":"تنبيه توضيحي: تم اختيار سيناريو التجاوز الخطر."
+  };
+
+  select.addEventListener("change", function(){
+    dashboard.classList.remove("sg-alert");
+    status.textContent = "جاهز للرصد";
+    alertType.textContent = "لا يوجد";
+    target.textContent = "AI TRACKING: DEMO";
+    resultTitle.textContent = "النظام جاهز";
+    resultText.textContent = "اختر نوع المخالفة ثم ابدأ المحاكاة التوضيحية.";
+    button.textContent = "▶ بدء المحاكاة";
+  });
+
+  button.addEventListener("click", function(){
+    const type = select.value;
+    button.disabled = true;
+    button.textContent = "⏳ جارٍ تجهيز التنبيه...";
+    status.textContent = "جارٍ التحليل التجريبي";
+    alertType.textContent = "قيد التجهيز";
+    resultTitle.textContent = "جارٍ تجهيز السيناريو";
+    resultText.textContent = "هذا عرض توضيحي وليس كشفًا حقيقيًا.";
+    target.textContent = "SIMULATION IN PROGRESS";
+
+    window.setTimeout(function(){
+      dashboard.classList.add("sg-alert");
+      status.textContent = "اكتمل العرض التجريبي";
+      alertType.textContent = type;
+      target.textContent = "DEMO ALERT: " + type;
+      resultTitle.textContent = "🚨 تنبيه تجريبي: " + type;
+      resultText.textContent = descriptions[type] + " الرسومات لا تحلل المرور فعليًا، والتنبيه لا يثبت وقوع مخالفة.";
+      button.disabled = false;
+      button.textContent = "↻ إعادة المحاكاة";
+    }, 900);
+  });
+})();
+</script>
+</body>
+</html>
